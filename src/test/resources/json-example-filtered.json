@@ -1,0 +1,77 @@
+{
+  "total_count": 3,
+  "items": [
+    {
+      "stargazers_count": 1525,
+      "git_url": "git://github.com/mybatis/spring.git",
+      "owner": {
+        "gists_url": "https://api.github.com/users/mybatis/gists{/gist_id}",
+        "repos_url": "https://api.github.com/users/mybatis/repos",
+        "following_url": "https://api.github.com/users/mybatis/following{/other_user}",
+        "starred_url": "https://api.github.com/users/mybatis/starred{/owner}{/repo}",
+        "login": "mybatis",
+        "followers_url": "https://api.github.com/users/mybatis/followers",
+        "type": "Organization",
+        "url": "https://api.github.com/users/mybatis",
+        "subscriptions_url": "https://api.github.com/users/mybatis/subscriptions",
+        "received_events_url": "https://api.github.com/users/mybatis/received_events",
+        "avatar_url": "https://avatars0.githubusercontent.com/u/1483254?v=4",
+        "events_url": "https://api.github.com/users/mybatis/events{/privacy}",
+        "html_url": "https://github.com/mybatis",
+        "site_admin": false,
+        "id": 1483254,
+        "gravatar_id": "",
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjE0ODMyNTQ=",
+        "organizations_url": "https://api.github.com/users/mybatis/orgs"
+      }
+    },
+    {
+      "stargazers_count": 1818,
+      "git_url": "git://github.com/seaswalker/Spring.git",
+      "owner": {
+        "gists_url": "https://api.github.com/users/seaswalker/gists{/gist_id}",
+        "repos_url": "https://api.github.com/users/seaswalker/repos",
+        "following_url": "https://api.github.com/users/seaswalker/following{/other_user}",
+        "starred_url": "https://api.github.com/users/seaswalker/starred{/owner}{/repo}",
+        "login": "seaswalker",
+        "followers_url": "https://api.github.com/users/seaswalker/followers",
+        "type": "User",
+        "url": "https://api.github.com/users/seaswalker",
+        "subscriptions_url": "https://api.github.com/users/seaswalker/subscriptions",
+        "received_events_url": "https://api.github.com/users/seaswalker/received_events",
+        "avatar_url": "https://avatars1.githubusercontent.com/u/12082227?v=4",
+        "events_url": "https://api.github.com/users/seaswalker/events{/privacy}",
+        "html_url": "https://github.com/seaswalker",
+        "site_admin": false,
+        "id": 12082227,
+        "gravatar_id": "",
+        "node_id": "MDQ6VXNlcjEyMDgyMjI3",
+        "organizations_url": "https://api.github.com/users/seaswalker/orgs"
+      }
+    },
+    {
+      "stargazers_count": 31455,
+      "git_url": "git://github.com/spring-projects/spring-boot.git",
+      "owner": {
+        "gists_url": "https://api.github.com/users/spring-projects/gists{/gist_id}",
+        "repos_url": "https://api.github.com/users/spring-projects/repos",
+        "following_url": "https://api.github.com/users/spring-projects/following{/other_user}",
+        "starred_url": "https://api.github.com/users/spring-projects/starred{/owner}{/repo}",
+        "login": "spring-projects",
+        "followers_url": "https://api.github.com/users/spring-projects/followers",
+        "type": "Organization",
+        "url": "https://api.github.com/users/spring-projects",
+        "subscriptions_url": "https://api.github.com/users/spring-projects/subscriptions",
+        "received_events_url": "https://api.github.com/users/spring-projects/received_events",
+        "avatar_url": "https://avatars0.githubusercontent.com/u/317776?v=4",
+        "events_url": "https://api.github.com/users/spring-projects/events{/privacy}",
+        "html_url": "https://github.com/spring-projects",
+        "site_admin": false,
+        "id": 317776,
+        "gravatar_id": "",
+        "node_id": "MDEyOk9yZ2FuaXphdGlvbjMxNzc3Ng==",
+        "organizations_url": "https://api.github.com/users/spring-projects/orgs"
+      }
+    }
+  ]
+}
