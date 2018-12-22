@@ -1,4 +1,4 @@
-package FileWritersReaders;
+package fr.imt.ales.msr.FileWritersReaders;
 
 import fr.imt.ales.msr.FileWritersReaders.FileReaderJSON;
 import org.json.JSONObject;

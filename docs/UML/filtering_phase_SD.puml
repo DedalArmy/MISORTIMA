@@ -1,12 +1,12 @@
 @startuml
 title Filtering raw data by fields
 
-participant Main
+participant fr.imt.ales.msr.Main
 participant RawDataFilter
 participant FileReaderJSON
 participant FileWriterJSON
 
-Main -> RawDataFilter : extractSpecificFieldsfromJSONFile(Path JSON file, \n List fields to extract)
+fr.imt.ales.msr.Main -> RawDataFilter : extractSpecificFieldsfromJSONFile(Path JSON file, \n List fields to extract)
 activate RawDataFilter
 RawDataFilter -> FileReaderJSON : readJSONFile(Path Json File)
 deactivate RawDataFilter
@@ -16,10 +16,10 @@ deactivate FileReaderJSON
 activate RawDataFilter
 RawDataFilter --> RawDataFilter :  Build JSON Path expression \n according to the list \n of fields to extract
 RawDataFilter --> RawDataFilter : Parse the JSON object from file
-RawDataFilter --> Main : Return a JSON Object filtered by specific fields
+RawDataFilter --> fr.imt.ales.msr.Main : Return a JSON Object filtered by specific fields
 deactivate RawDataFilter
-activate Main
-Main --> FileWriterJSON : writeJsonFile(JSON object filtered)
-deactivate Main
+activate fr.imt.ales.msr.Main
+fr.imt.ales.msr.Main --> FileWriterJSON : writeJsonFile(JSON object filtered)
+deactivate fr.imt.ales.msr.Main
 
 @enduml

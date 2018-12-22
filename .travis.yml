@@ -3,9 +3,16 @@ language: java
 jdk:
 - oraclejdk8
 
+env:
+  global:
+  - CODECOV_TOKEN="82ee559e-6d02-402f-97ae-6351d7a99bfb"
+
 sudo: false
 
 # cache the build tool's caches
 cache:
   directories:
   - $HOME/.m2
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)

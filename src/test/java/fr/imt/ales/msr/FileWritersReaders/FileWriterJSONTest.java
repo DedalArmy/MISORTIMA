@@ -1,4 +1,4 @@
-package FileWritersReaders;
+package fr.imt.ales.msr.FileWritersReaders;
 
 import fr.imt.ales.msr.FileWritersReaders.FileWriterJSON;
 import org.json.JSONObject;
@@ -53,7 +53,7 @@ public class FileWriterJSONTest {
         String malformedPath = "Yooou/Hooouuu";
 
         Throwable exception = assertThrows(InvalidPathException.class,
-                ()->{fileWriterJSON.writeJsonFile(jsonObjectExpected, malformedPath, NAME_FILE_JSON);} );
+                ()->{fileWriterJSON.writeJsonFile(jsonObjectExpected, malformedPath, NAME_FILE_JSON);});
 
         assertEquals("Error path to write JSON file is invalid or is not a directory: " + malformedPath, exception.getMessage());
     }

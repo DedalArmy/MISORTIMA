@@ -1,6 +1,6 @@
 package LoggerUtils;
 
-import fr.imt.ales.msr.LoggerUtils.LaunchBar;
+import fr.imt.ales.msr.LoggerUtils.LoggerPrintUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -21,7 +20,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LaunchBarTest {
+public class LoggerPrintUtilsTest {
     private File propertiesLogFile;
     private URL logFileUrl;
     private Logger logger;
@@ -33,7 +32,6 @@ public class LaunchBarTest {
 
         // this will force a reconfiguration
         context.setConfigLocation(propertiesLogFile.toURI());
-        logFileUrl = new URL(System.getProperty("java.io.tmpdir") + "/logs/trace.log");
     }
 
     @Test
@@ -41,15 +39,18 @@ public class LaunchBarTest {
         //System.out.println(logFileUrl);
 
         logger = LogManager.getLogger(this.getClass());
-        LaunchBar.displayLaunchBar(logger,"Test launch bar empty",0,100);
-        LaunchBar.displayLaunchBar(logger,"Test launch bar empty",50,100);
-        LaunchBar.displayLaunchBar(logger,"Test launch bar empty",100,100);
+        LoggerPrintUtils.printLaunchBar(logger,"Test launch bar empty",0,100);
+        LoggerPrintUtils.printLaunchBar(logger,"Test launch bar 50%",50,100);
+        LoggerPrintUtils.printLaunchBar(logger,"Test launch bar 100%",100,100);
 
-
+        logFileUrl = new URL("file://" + System.getProperty("java.io.tmpdir") + "/logs/trace.log");
         String logString = new String(Files.readAllBytes(Paths.get(logFileUrl.toURI())), Charset.forName("UTF-8"));
 
+        assertTrue(logString.contains("Test launch bar empty"));
         assertTrue(logString.contains("[                                        ] 0.0%"));
+        assertTrue(logString.contains("Test launch bar 50%"));
         assertTrue(logString.contains("[====================                    ] 50.0%"));
+        assertTrue(logString.contains("Test launch bar 100%"));
         assertTrue(logString.contains("[========================================] 100.0%"));
     }
 

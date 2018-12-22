@@ -1,4 +1,4 @@
-package RawDataFilters;
+package fr.imt.ales.msr.RawDataFilters;
 
 import fr.imt.ales.msr.RawDataFilters.RawDataFilter;
 import org.json.JSONObject;

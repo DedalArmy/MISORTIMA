@@ -7,6 +7,7 @@ import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeaderElement;
 import org.apache.http.message.BasicStatusLine;
 import org.json.JSONObject;
@@ -57,24 +58,13 @@ public class GithubHttpClientTest {
     }
 
     @Test
-    public void testHandleLimitAPIGithubNominalCase() throws InterruptedException {
+    public void testGetterAndSetterHttpClient(){
         GithubHttpClient githubHttpClient = new GithubHttpClient();
 
-        assertEquals(2000.0,githubHttpClient.handleLimitAPIGithub(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()+2000),0));
-    }
+        CloseableHttpClient closeableHttpClientExpected = HttpClients.custom().setUserAgent("My-Custom-Client").build();
+        githubHttpClient.setHttpClient(closeableHttpClientExpected);
 
-    @Test
-    public void testHandleLimitAPIGithubNominalCaseWithRateLimitSupToZero() throws InterruptedException {
-        GithubHttpClient githubHttpClient = new GithubHttpClient();
-
-        assertEquals(0.0,githubHttpClient.handleLimitAPIGithub(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),13));
-    }
-
-    @Test
-    public void testHandleLimitAPIGithubNominalCaseWithRateLimitInfToZero() throws InterruptedException {
-        GithubHttpClient githubHttpClient = new GithubHttpClient();
-
-        assertEquals(0.0,githubHttpClient.handleLimitAPIGithub(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),-13));
+        assertEquals(closeableHttpClientExpected,githubHttpClient.getHttpClient());
     }
 
     @Test

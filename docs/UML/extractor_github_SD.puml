@@ -1,13 +1,13 @@
 @startuml
 title Github extraction mechanism
 
-participant Main
+participant fr.imt.ales.msr.Main
 participant GithubHttpClient
 participant REST_API_Github
 participant FileWriterJSON
 
 
-Main -> GithubHttpClient : getRawDataJson(Url "/search/q=[searching_criterias]")
+fr.imt.ales.msr.Main -> GithubHttpClient : getRawDataJson(Url "/search/q=[searching_criterias]")
 activate GithubHttpClient
 GithubHttpClient -> REST_API_Github : GET "/search/q=[searching_criterias]"
 deactivate GithubHttpClient
@@ -47,7 +47,7 @@ note right
      data provided
      by Github
 end note
-GithubHttpClient --> Main : Data from Github in JSON Object
+GithubHttpClient --> fr.imt.ales.msr.Main : Data from Github in JSON Object
 
 deactivate GithubHttpClient
 
