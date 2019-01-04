@@ -1,6 +1,7 @@
 package fr.imt.ales.msr.RawDataFilters;
 
 import fr.imt.ales.msr.RawDataFilters.RawDataFilter;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,7 @@ public class RawDataFilterTest {
 
         List<String> fieldsToExtract = new ArrayList<>();
         fieldsToExtract.add("git_url");
+        fieldsToExtract.add("commits_url");
         fieldsToExtract.add("stargazers_count");
         fieldsToExtract.add("owner");
 
@@ -76,7 +78,67 @@ public class RawDataFilterTest {
     public void testExtractSpecificFieldsJsonPathFromJSONFileNominalCase() throws IOException, URISyntaxException {
         RawDataFilter rawDataFilter = new RawDataFilter();
 
-        JSONObject jsonObjectActual = rawDataFilter.extractSpecificFieldsFromJSONFile(pathToJsonFileTestRawData, "$..['git_url','stargazers_count','owner']");
+        JSONObject jsonObjectActual = rawDataFilter.extractSpecificFieldsFromJSONFile(pathToJsonFileTestRawData, "$..['git_url','stargazers_count','owner','commits_url']");
         assertEquals(new JSONObject(fileContentJsonObjectExpected).toString(2),jsonObjectActual.toString(2));
     }
+
+    @Test
+    public void testDeleteDuplicateEntriesJSONObject(){
+        RawDataFilter rawDataFilter = new RawDataFilter();
+
+        JSONArray jsonArrayItems = new JSONArray();
+        jsonArrayItems.put(new JSONObject().put("key1Duplicate","value1duplicate"));
+        jsonArrayItems.put(new JSONObject().put("key1Duplicate","value1duplicate"));
+        jsonArrayItems.put(new JSONObject().put("key2","value2"));
+        jsonArrayItems.put(new JSONObject().put("key3Duplicate","value3Duplicate"));
+        jsonArrayItems.put(new JSONObject().put("key3Duplicate","value3Duplicate"));
+        jsonArrayItems.put(new JSONObject().put("key4","value4"));
+        JSONObject jsonObjectToClean = new JSONObject();
+        jsonObjectToClean.put("items",jsonArrayItems);
+        jsonObjectToClean.put("total_count",jsonArrayItems.length());
+
+        JSONArray jsonArrayItemsExpected = new JSONArray();
+        jsonArrayItemsExpected.put(new JSONObject().put("key1Duplicate","value1duplicate"));
+        jsonArrayItemsExpected.put(new JSONObject().put("key2","value2"));
+        jsonArrayItemsExpected.put(new JSONObject().put("key3Duplicate","value3Duplicate"));
+        jsonArrayItemsExpected.put(new JSONObject().put("key4","value4"));
+        JSONObject jsonObjectExpected = new JSONObject();
+        jsonObjectExpected.put("items",jsonArrayItemsExpected);
+        jsonObjectExpected.put("total_count",jsonArrayItemsExpected.length());
+
+        rawDataFilter.deleteDuplicateEntriesJSONObject(jsonObjectToClean);
+
+        assertEquals(jsonObjectExpected.toString(2),jsonObjectToClean.toString(2));
+    }
+
+    @Test
+    public void testDeleteDuplicateEntriesJSONObjectWithoutItems(){
+        RawDataFilter rawDataFilter = new RawDataFilter();
+
+        JSONObject jsonObjectToClean = new JSONObject();
+        jsonObjectToClean.put("total_count",52);
+        jsonObjectToClean.put("hello",new JSONObject().put("World","MyWorld"));
+
+        JSONObject jsonObjectExpected = new JSONObject(jsonObjectToClean.toString());
+
+        rawDataFilter.deleteDuplicateEntriesJSONObject(jsonObjectToClean);
+
+        assertEquals(jsonObjectExpected.toString(2),jsonObjectToClean.toString(2));
+    }
+
+    @Test
+    public void testDeleteDuplicateEntriesJSONObjectWithItemsNotJSONArray(){
+        RawDataFilter rawDataFilter = new RawDataFilter();
+
+        JSONObject jsonObjectToClean = new JSONObject();
+        jsonObjectToClean.put("total_count",52);
+        jsonObjectToClean.put("items",new JSONObject().put("Hello","World"));
+
+        JSONObject jsonObjectExpected = new JSONObject(jsonObjectToClean.toString());
+
+        rawDataFilter.deleteDuplicateEntriesJSONObject(jsonObjectToClean);
+
+        assertEquals(jsonObjectExpected.toString(2),jsonObjectToClean.toString(2));
+    }
+
 }

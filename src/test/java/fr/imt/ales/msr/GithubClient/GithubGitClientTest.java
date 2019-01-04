@@ -57,7 +57,7 @@ public class GithubGitClientTest {
     public void cloneRepositoryWithInvalidRemoteException() throws GitAPIException {
         GithubGitClient githubGitClient = new GithubGitClient();
 
-        Throwable exception = assertThrows(InvalidRemoteException.class,
+        assertThrows(InvalidRemoteException.class,
                 ()->{githubGitClient.cloneRepository("https://github.com/occatHelloWorld.git",pathTmpDir);});
     }
 
@@ -106,6 +106,21 @@ public class GithubGitClientTest {
 
         GithubGitClient githubGitClient = new GithubGitClient();
         githubGitClient.cloneRepositoriesFromList(jsonObjectReposWithCommits,pathTmpDir,null,null);
+
+        File fileRepo = new File(pathTmpDir);
+        ArrayList<String> listFiles = new ArrayList<>(Arrays.asList(fileRepo.list()));
+        assertTrue(fileRepo.list().length == 2);
+        assertTrue(listFiles.contains("peholmst"));
+        assertTrue(listFiles.contains("spring-projects"));
+    }
+
+    @Test
+    public void cloneRepositoriesFromListNominalCaseWithSlash() throws URISyntaxException, IOException, GitAPIException, GitRepositoryNotInitializedException {
+        URL urlJsonFileReposWithCommits= Thread.currentThread().getContextClassLoader().getResource("json-with-commits.json");
+        JSONObject jsonObjectReposWithCommits = new JSONObject(new String(Files.readAllBytes(Paths.get(urlJsonFileReposWithCommits.toURI())), Charset.forName("UTF-8")));
+
+        GithubGitClient githubGitClient = new GithubGitClient();
+        githubGitClient.cloneRepositoriesFromList(jsonObjectReposWithCommits,pathTmpDir+"/",null,"Test");
 
         File fileRepo = new File(pathTmpDir);
         ArrayList<String> listFiles = new ArrayList<>(Arrays.asList(fileRepo.list()));

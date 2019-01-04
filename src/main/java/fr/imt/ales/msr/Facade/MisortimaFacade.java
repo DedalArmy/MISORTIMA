@@ -69,19 +69,19 @@ public class MisortimaFacade {
 
     /**
      * Associates the latest commit to each repositories stored in JSON file and write a new JSON file
-     * @param pathToJsonFile
-     * @param pathToJsonFileWithAssociatedCommit
+     * @param pathJsonFileToRead
+     * @param pathWriteJsonFileWithAssociatedCommit
      * @param filenameJsonFileWithAssociatedCommit
      */
-    public void associatedRepositoriesListToLastCommit(String pathToJsonFile,
-                                                       String pathToJsonFileWithAssociatedCommit,
+    public void associatedRepositoriesListToLastCommit(String pathJsonFileToRead,
+                                                       String pathWriteJsonFileWithAssociatedCommit,
                                                        String filenameJsonFileWithAssociatedCommit) throws IOException, URISyntaxException, InterruptedException {
-        JSONObject filteredJsonObject = fileReaderJSON.readJSONFile(pathToJsonFile);
+        JSONObject filteredJsonObject = fileReaderJSON.readJSONFile(pathJsonFileToRead);
         JSONObject jsonOjectWithAssociatedCommit = githubHttpClient.getLastCommitForRepositoriesList(
-                fileReaderJSON.readJSONFile(pathToJsonFile),fileWriterJSON,pathToJsonFileWithAssociatedCommit,filenameJsonFileWithAssociatedCommit);
+                fileReaderJSON.readJSONFile(pathJsonFileToRead),fileWriterJSON,pathWriteJsonFileWithAssociatedCommit,filenameJsonFileWithAssociatedCommit);
 
         fileWriterJSON.writeJsonFile(jsonOjectWithAssociatedCommit,
-                pathToJsonFileWithAssociatedCommit,
+                pathWriteJsonFileWithAssociatedCommit,
                 filenameJsonFileWithAssociatedCommit);
     }
 

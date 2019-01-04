@@ -38,10 +38,12 @@ public class Main {
             e.printStackTrace();
         }*/
 
-        FileReaderJSON fileReaderJSON = new FileReaderJSON();
+
+        /*FileReaderJSON fileReaderJSON = new FileReaderJSON();
         try {
-            JSONObject jsonObject = fileReaderJSON.readJSONFile("/home/quentin/mining/results_with_commit.json");
+            JSONObject jsonObject = fileReaderJSON.readJSONFile("/home/quentin/mining/results_raw.json");
             JSONArray jsonArray = jsonObject.getJSONArray("items");
+            System.out.println(jsonArray.length());
             List<Object> efef = jsonArray.toList();
             LinkedHashSet<Object> dff  = new LinkedHashSet<Object>(efef);
             jsonArray = new JSONArray(dff);
@@ -49,20 +51,21 @@ public class Main {
             fef.put("total_count",jsonArray.length());
             fef.put("items",jsonArray);
 
-            FileWriterJSON fileWriterJSON = new FileWriterJSON();
+            System.out.println(jsonArray.length());
+
+            /*FileWriterJSON fileWriterJSON = new FileWriterJSON();
             fileWriterJSON.writeJsonFile(fef,"/home/quentin/mining","coucou.json");
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
         //e28c3de2fbc60097c02f17fc30f2786a3fb56817
         /*try {
             GithubGitClient githubGitClient = new GithubGitClient();
-            githubGitClient.cloneRepository("https://github.com/DedalArmy/MISORTIMA.git","/home/quentin/testm","qperez","*xq8yp724");
             githubGitClient.checkoutWithCommitID("e9f75667096e6ed7634331b9d3d32797a286e00e");
         } catch (GitAPIException e) {
             e.printStackTrace();

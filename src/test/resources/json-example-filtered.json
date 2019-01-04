@@ -4,6 +4,7 @@
     {
       "stargazers_count": 1525,
       "git_url": "git://github.com/mybatis/spring.git",
+      "commits_url": "https://api.github.com/repos/mybatis/spring/commits{/sha}",
       "owner": {
         "gists_url": "https://api.github.com/users/mybatis/gists{/gist_id}",
         "repos_url": "https://api.github.com/users/mybatis/repos",
@@ -28,6 +29,7 @@
     {
       "stargazers_count": 1818,
       "git_url": "git://github.com/seaswalker/Spring.git",
+      "commits_url": "https://api.github.com/repos/seaswalker/Spring/commits{/sha}",
       "owner": {
         "gists_url": "https://api.github.com/users/seaswalker/gists{/gist_id}",
         "repos_url": "https://api.github.com/users/seaswalker/repos",
@@ -52,6 +54,7 @@
     {
       "stargazers_count": 31455,
       "git_url": "git://github.com/spring-projects/spring-boot.git",
+      "commits_url": "https://api.github.com/repos/spring-projects/spring-boot/commits{/sha}",
       "owner": {
         "gists_url": "https://api.github.com/users/spring-projects/gists{/gist_id}",
         "repos_url": "https://api.github.com/users/spring-projects/repos",

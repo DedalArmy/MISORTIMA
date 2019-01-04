@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class RawDataFilter {
@@ -106,4 +107,41 @@ public class RawDataFilter {
 
         return jsonObjExtractionResults;
     }
+
+    /**
+     * Deletes the duplicate entries into the JSON object given in parameter
+     * @param jsonObjectToClean JSONObject containing an element 'items' whose value is a JSONArray
+     */
+    public void deleteDuplicateEntriesJSONObject(JSONObject jsonObjectToClean){
+        if(!jsonObjectToClean.has("items")){
+            logger.warn("The JSON object contains a JSONArray 'items'");
+            return;
+        }
+
+        if(!(jsonObjectToClean.get("items") instanceof JSONArray)){
+            logger.warn("The JSON object 'items' is not a JSONArray");
+            return;
+        }
+
+        JSONArray jsonArrayClean = deleteDuplicateEntriesJSONArray(jsonObjectToClean.getJSONArray("items"));
+
+        jsonObjectToClean.remove("items");
+        jsonObjectToClean.remove("total_count");
+        jsonObjectToClean.put("total_count",jsonArrayClean.length());
+        jsonObjectToClean.put("items",jsonArrayClean);
+    }
+
+    /**
+     * Deletes the duplicate entries into the JSONArray given in parameter
+     * @param jsonArrayToClean JSONArray which contains duplicate entries
+     * @return JSONArray witout duplicate entries
+     */
+    public JSONArray deleteDuplicateEntriesJSONArray(JSONArray jsonArrayToClean){
+        List<Object> listWithDuplicateEntries = jsonArrayToClean.toList();
+        //Create a linkedHashSet to delete the duplicate
+        LinkedHashSet<Object> linkedHashSetClean = new LinkedHashSet<>(listWithDuplicateEntries);
+        //Create a new JSON Array with the linkedHashSet without duplicate objects
+        return new JSONArray(linkedHashSetClean);
+    }
+
 }

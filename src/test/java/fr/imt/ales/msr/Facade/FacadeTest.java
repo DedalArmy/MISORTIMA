@@ -1,9 +1,11 @@
 package fr.imt.ales.msr.Facade;
 
+import fr.imt.ales.msr.GithubClient.GitRepositoryNotInitializedException;
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -15,6 +17,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,9 +46,7 @@ public class FacadeTest {
 
         jsonObjectOctocatRepoExpected = new JSONObject(fileContentJsonObjectOctocatRepoExpected);
 
-        pathTmpDir = System.getProperty("java.io.tmpdir");
-        System.out.println(pathTestResources);
-        System.out.println(pathTmpDir);
+        pathTmpDir = System.getProperty("java.io.tmpdir");// + "/test-clone";
     }
 
     @Test
@@ -73,6 +74,7 @@ public class FacadeTest {
     public void testFilterDataNominalCase() throws GitAPIException, IOException, URISyntaxException {
         List<String> fieldsToExtract = new ArrayList<>();
         fieldsToExtract.add("git_url");
+        fieldsToExtract.add("commits_url");
         fieldsToExtract.add("stargazers_count");
         fieldsToExtract.add("owner");
 
@@ -87,6 +89,25 @@ public class FacadeTest {
         assertEquals(new JSONObject(fileContentJsonObjectFiltered).toString(2),new JSONObject(fileContentActualJsonFiltered).toString(2));
     }
 
-    //@Test
+    @Test
+    public void testCloneRepositoriesNominalCase() throws GitAPIException, URISyntaxException, IOException, GitRepositoryNotInitializedException {
+        MisortimaFacade misortimaFacade = new MisortimaFacade();
 
+        URL urlJsonFileReposWithCommits= Thread.currentThread().getContextClassLoader().getResource("json-with-commits.json");
+        //JSONObject jsonObjectReposWithCommits = new JSONObject(new String(Files.readAllBytes(Paths.get(urlJsonFileReposWithCommits.toURI())), Charset.forName("UTF-8")));
+
+        misortimaFacade.cloneRepositories(Paths.get(urlJsonFileReposWithCommits.toURI()).toString(),pathTmpDir + "/test-clone","","");
+
+        File fileRepo = new File(pathTmpDir + "/test-clone");
+        ArrayList<String> listFiles = new ArrayList<>(Arrays.asList(fileRepo.list()));
+        assertTrue(fileRepo.list().length == 2);
+        assertTrue(listFiles.contains("peholmst"));
+        assertTrue(listFiles.contains("spring-projects"));
+    }
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        File fileRepo = new File(pathTmpDir + "/test-clone");
+        FileUtils.deleteDirectory(fileRepo);
+    }
 }

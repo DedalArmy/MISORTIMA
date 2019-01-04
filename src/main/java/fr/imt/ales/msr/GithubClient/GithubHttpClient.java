@@ -91,7 +91,7 @@ public class GithubHttpClient {
 
                 if(headerElementLinkString.contains("next")) {
                     urlNextPageString = headerElementLinkString.substring(headerElementLinkString.indexOf("<") + 1, headerElementLinkString.indexOf(">"));
-                    logger.debug(urlNextPageString);
+                    logger.debug("Next page : " + urlNextPageString);
                 }
                 if(headerElementLinkString.contains("prev")) {
                     isFirstPage = false;
@@ -139,35 +139,6 @@ public class GithubHttpClient {
         return null;
     }
 
-
-    public JSONObject getLastCommitForRepositoriesList(JSONObject jsonObjectListRepo) throws InterruptedException, IOException, URISyntaxException {
-        JSONArray jsonArrayItems = jsonObjectListRepo.getJSONArray("items");
-
-        for (int i = 0; i < jsonArrayItems.length(); i++) {
-
-            LoggerPrintUtils.printLaunchBar(logger,"==< Association of commit and repositories >==",i+1,jsonArrayItems.length());
-            JSONObject commit = new JSONObject();
-
-            if(jsonArrayItems.get(i) instanceof JSONObject){
-                JSONObject jsonObjectRepo = jsonArrayItems.getJSONObject(i);
-
-                JSONObject jsonObjectResponseCommit = getLastCommitFromRepo(jsonObjectRepo.getString("commits_url"),"master");
-
-                if (jsonObjectResponseCommit.has("sha"))
-                    commit.put("sha", jsonObjectResponseCommit.get("sha"));
-                if(jsonObjectResponseCommit.has("html_url"))
-                    commit.put("html_url", jsonObjectResponseCommit.get("html_url"));
-
-                jsonObjectRepo.put("last_commit",commit);
-            }
-            else{
-                commit.put("unknown_type",jsonArrayItems.get(i).toString());
-            }
-        }
-
-        return jsonObjectListRepo;
-    }
-
     public JSONObject getLastCommitForRepositoriesList(JSONObject jsonObjectListRepo, FileWriterJSON fileWriterJSON, String path, String filename) throws InterruptedException, IOException, URISyntaxException {
         JSONArray jsonArrayItems = jsonObjectListRepo.getJSONArray("items");
 
@@ -178,13 +149,17 @@ public class GithubHttpClient {
 
             if(jsonArrayItems.get(i) instanceof JSONObject){
                 JSONObject jsonObjectRepo = jsonArrayItems.getJSONObject(i);
+                JSONObject jsonObjectResponseCommit = null;
 
-                JSONObject jsonObjectResponseCommit = getLastCommitFromRepo(jsonObjectRepo.getString("commits_url"),"master");
+                //get the JSON Object which corresponds to the response of the request on the API
+                if (jsonObjectRepo.has("commits_url")){
+                    jsonObjectResponseCommit = getLastCommitFromRepo(jsonObjectRepo.getString("commits_url"),"master");
 
-                if (jsonObjectResponseCommit.has("sha"))
-                    commit.put("sha", jsonObjectResponseCommit.get("sha"));
-                if(jsonObjectResponseCommit.has("html_url"))
-                    commit.put("html_url", jsonObjectResponseCommit.get("html_url"));
+                    if (jsonObjectResponseCommit != null && jsonObjectResponseCommit.has("sha"))
+                        commit.put("sha", jsonObjectResponseCommit.get("sha"));
+                    if(jsonObjectResponseCommit != null && jsonObjectResponseCommit.has("html_url"))
+                        commit.put("html_url", jsonObjectResponseCommit.get("html_url"));
+                }
 
                 jsonObjectRepo.put("last_commit",commit);
             }
