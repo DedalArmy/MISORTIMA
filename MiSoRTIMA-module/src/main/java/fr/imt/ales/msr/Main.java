@@ -39,28 +39,31 @@ public class Main {
         }*/
 
 
-        /*FileReaderJSON fileReaderJSON = new FileReaderJSON();
+        FileReaderJSON fileReaderJSON = new FileReaderJSON();
+        RawDataFilter rawDataFilter = new RawDataFilter();
         try {
-            JSONObject jsonObject = fileReaderJSON.readJSONFile("/home/quentin/mining/results_raw.json");
-            JSONArray jsonArray = jsonObject.getJSONArray("items");
-            System.out.println(jsonArray.length());
-            List<Object> efef = jsonArray.toList();
-            LinkedHashSet<Object> dff  = new LinkedHashSet<Object>(efef);
-            jsonArray = new JSONArray(dff);
-            JSONObject fef = new JSONObject();
-            fef.put("total_count",jsonArray.length());
-            fef.put("items",jsonArray);
+            List<String> listFields = new ArrayList<>();
+            listFields.add("full_name");
+            listFields.add("stargazers_count");
+            listFields.add("watchers_count");
+            listFields.add("forks_count");
+            listFields.add("open_issues_count");
+            listFields.add("score");
+            listFields.add("size");
+            listFields.add("created_at");
 
-            System.out.println(jsonArray.length());
+            JSONObject jsonObjectExtracted = rawDataFilter.extractSpecificFieldsFromJSONFile("/home/quentin/mining/file_raw.json",listFields);
+            rawDataFilter.deleteDuplicateEntriesJSONObject(jsonObjectExtracted);
 
-            /*FileWriterJSON fileWriterJSON = new FileWriterJSON();
-            fileWriterJSON.writeJsonFile(fef,"/home/quentin/mining","coucou.json");
+
+            FileWriterJSON fileWriterJSON = new FileWriterJSON();
+            fileWriterJSON.writeJsonFile(jsonObjectExtracted, "/home/quentin/mining","results_filtered.json");
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
-        }*/
+        }
 
 
         //e28c3de2fbc60097c02f17fc30f2786a3fb56817

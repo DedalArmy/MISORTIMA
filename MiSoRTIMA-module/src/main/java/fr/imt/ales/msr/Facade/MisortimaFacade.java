@@ -7,7 +7,6 @@ import fr.imt.ales.msr.GithubClient.GithubGitClient;
 import fr.imt.ales.msr.GithubClient.GithubHttpClient;
 import fr.imt.ales.msr.RawDataFilters.RawDataFilter;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.util.io.LimitedInputStream;
 import org.json.JSONObject;
 
 import java.io.IOException;
