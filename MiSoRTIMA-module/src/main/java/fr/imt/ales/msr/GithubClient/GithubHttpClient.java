@@ -120,6 +120,171 @@ public class GithubHttpClient {
     }
 
     /**
+     *
+     * @param URLStringApi
+     * @param jsonAllItems
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     */
+    public JSONObject getRawDataJson(String URLStringApi, JSONObject jsonAllItems, String path, String jsonName) throws IOException, URISyntaxException, InterruptedException {
+        List<NameValuePair> urlParams = URLEncodedUtils.parse(new URI(urlEncodeSpecificChars(URLStringApi)), Charset.forName("UTF-8"));
+
+        int currentPageNumber = 1;
+        int lastPageNumber = 1;
+        String urlNextPageString = null;
+        boolean isFirstPage = true;
+
+
+        for (NameValuePair param : urlParams) {
+            if(param.getName().equals("page")){
+                currentPageNumber = Integer.parseInt(param.getValue());
+            }
+        }
+
+        logger.info("Get on : " + URLStringApi);
+        //execute the first request
+        HttpGet httpGet = new HttpGet(urlEncodeSpecificChars(URLStringApi));
+
+        //Handle response body
+        HttpResponse httpResponse = httpClient.execute(httpGet);
+        HttpEntity httpEntity = httpResponse.getEntity();
+        String responseString = EntityUtils.toString(httpEntity, "UTF-8");
+
+        //Get header for the next page
+        Header linkHeader = httpResponse.getFirstHeader("Link");
+
+        //Get headers and values for API limitations
+        Long timestampLimitResetHeader   = Long.parseLong(httpResponse.getFirstHeader("X-RateLimit-Reset").getValue());
+        Integer rateLimitRemainingHeader = Integer.parseInt(httpResponse.getFirstHeader("X-RateLimit-Remaining").getValue());
+
+        JSONObject jsonObjectResponse = new JSONObject(responseString);
+
+        logger.debug("Rate limit remaining : " + rateLimitRemainingHeader);
+
+        githubAPILimitManager.handleLimitAPIGithub(timestampLimitResetHeader, rateLimitRemainingHeader);
+
+        if(linkHeader != null){
+            HeaderElement[] headerElementTabLink = linkHeader.getElements();
+            for (HeaderElement headerElement : headerElementTabLink) {
+                String headerElementLinkString = headerElement.toString();
+
+                if(headerElementLinkString.contains("next")) {
+                    urlNextPageString = headerElementLinkString.substring(headerElementLinkString.indexOf("<") + 1, headerElementLinkString.indexOf(">"));
+                    logger.debug("Next page : " + urlNextPageString);
+                }
+                if(headerElementLinkString.contains("prev")) {
+                    isFirstPage = false;
+                }
+                if (headerElementLinkString.contains("last")){
+                    lastPageNumber = Integer.parseInt(StringUtils.substringBetween(headerElementLinkString,"page=", ">"));
+                }
+            }
+        }
+
+        if(isFirstPage){
+            jsonAllItems = jsonObjectResponse;
+        }else{
+            //concatenate list items
+            jsonAllItems.getJSONArray("items").put(jsonObjectResponse.getJSONArray("items"));
+        }
+
+        //return the json object if there is no next page
+        if(urlNextPageString == null || urlNextPageString.equals(""))
+            return jsonAllItems;
+
+        FileWriterJSON fileWriterJSON  = new FileWriterJSON();
+        fileWriterJSON.writeJsonFile(jsonAllItems,path,jsonName);
+
+        //display launchbar
+        LoggerPrintUtils.printLaunchBar(logger,"Progress status request Github API" ,currentPageNumber,lastPageNumber);
+        //Call recursively on the next page
+        return getRawDataJson(urlNextPageString, jsonAllItems, path, jsonName);
+    }
+
+    /**
+     *
+     * @param URLStringApi
+     * @param jsonAllItems
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     */
+    public JSONArray getRawDataJsonArray(String URLStringApi, JSONArray jsonArrayItems) throws IOException, URISyntaxException, InterruptedException {
+        List<NameValuePair> urlParams = URLEncodedUtils.parse(new URI(urlEncodeSpecificChars(URLStringApi)), Charset.forName("UTF-8"));
+
+        int currentPageNumber = 1;
+        int lastPageNumber = 1;
+        String urlNextPageString = null;
+        boolean isFirstPage = true;
+
+
+        for (NameValuePair param : urlParams) {
+            if(param.getName().equals("page")){
+                currentPageNumber = Integer.parseInt(param.getValue());
+            }
+        }
+
+        logger.info("Get on : " + URLStringApi);
+        //execute the first request
+        HttpGet httpGet = new HttpGet(urlEncodeSpecificChars(URLStringApi));
+
+        //Handle response body
+        HttpResponse httpResponse = httpClient.execute(httpGet);
+        HttpEntity httpEntity = httpResponse.getEntity();
+        String responseString = EntityUtils.toString(httpEntity, "UTF-8");
+
+        //Get header for the next page
+        Header linkHeader = httpResponse.getFirstHeader("Link");
+
+        //Get headers and values for API limitations
+        Long timestampLimitResetHeader   = Long.parseLong(httpResponse.getFirstHeader("X-RateLimit-Reset").getValue());
+        Integer rateLimitRemainingHeader = Integer.parseInt(httpResponse.getFirstHeader("X-RateLimit-Remaining").getValue());
+
+        JSONArray jsonArrayResponse = new JSONArray(responseString);
+
+        logger.debug("Rate limit remaining : " + rateLimitRemainingHeader);
+
+        githubAPILimitManager.handleLimitAPIGithub(timestampLimitResetHeader, rateLimitRemainingHeader);
+
+        if(linkHeader != null){
+            HeaderElement[] headerElementTabLink = linkHeader.getElements();
+            for (HeaderElement headerElement : headerElementTabLink) {
+                String headerElementLinkString = headerElement.toString();
+
+                if(headerElementLinkString.contains("next")) {
+                    urlNextPageString = headerElementLinkString.substring(headerElementLinkString.indexOf("<") + 1, headerElementLinkString.indexOf(">"));
+                    logger.debug("Next page : " + urlNextPageString);
+                }
+                if(headerElementLinkString.contains("prev")) {
+                    isFirstPage = false;
+                }
+                if (headerElementLinkString.contains("last")){
+                    lastPageNumber = Integer.parseInt(StringUtils.substringBetween(headerElementLinkString,"page=", ">"));
+                }
+            }
+        }
+
+        if(isFirstPage){
+            jsonArrayItems = jsonArrayResponse;
+        }else{
+            //concatenate list items
+            jsonArrayItems = concatArray(jsonArrayItems,jsonArrayResponse);
+        }
+
+        //return the json object if there is no next page
+        if(urlNextPageString == null || urlNextPageString.equals(""))
+            return jsonArrayItems;
+
+        //display launchbar
+        LoggerPrintUtils.printLaunchBar(logger,"Progress status request Github API" ,currentPageNumber,lastPageNumber);
+        //Call recursively on the next page
+        return getRawDataJsonArray(urlNextPageString, jsonArrayItems);
+    }
+
+    /**
      * Returns the JSONObject which represent the last commit on a given branch
      * @param commitUrl URL which points to the address of the commit API, example : "https://api.github.com/repos/mybatis/spring/commits{/sha}"
      * @param branchLastCommit Branch to get the last commit
@@ -196,5 +361,16 @@ public class GithubHttpClient {
      */
     public void setHttpClient(CloseableHttpClient httpClient){
         this.httpClient = httpClient;
+    }
+
+    private JSONArray concatArray(JSONArray arr1, JSONArray arr2){
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < arr1.length(); i++) {
+            result.put(arr1.get(i));
+        }
+        for (int i = 0; i < arr2.length(); i++) {
+            result.put(arr2.get(i));
+        }
+        return result;
     }
 }

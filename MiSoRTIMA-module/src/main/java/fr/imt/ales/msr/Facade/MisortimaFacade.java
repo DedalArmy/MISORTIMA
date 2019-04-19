@@ -46,7 +46,8 @@ public class MisortimaFacade {
      */
     public void extractAndSaveJSONDataFromURL(String URL, String path, String filename)
             throws InterruptedException, IOException, URISyntaxException {
-        fileWriterJSON.writeJsonFile(githubHttpClient.getRawDataJson(URL, new JSONObject()),path,filename);
+        //fileWriterJSON.writeJsonFile(githubHttpClient.getRawDataJson(URL, new JSONObject()),path,filename);
+        fileWriterJSON.writeJsonFile(githubHttpClient.getRawDataJson(URL, new JSONObject(),path,filename),path,filename);
     }
 
     /**

@@ -8,7 +8,6 @@
     <artifactId>MiSoRTIMA</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>spring-architecture-reverser</module>
         <module>MiSoRTIMA-module</module>
     </modules>
     <packaging>pom</packaging>
