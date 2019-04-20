@@ -30,8 +30,22 @@ public class GithubAPILimitManager {
             logger.info("==< GitHub API Limit reached >==");
             logger.info("WAIT : "+ sleepTime + " milliseconds before next request");
             logger.info("==< The program is not freeze, it's just a thread sleep ;-) >==");
-            Thread.sleep(sleepTime);
+            boolean displaySoftwareAlive  = false;
+            if(sleepTime < 300000){
+                Thread.sleep(sleepTime);
+                return sleepTime;
+            }
+            for (int i = 300000; i < sleepTime; i+=300000) {
+                Thread.sleep(i);
+                if(displaySoftwareAlive){
+                    logger.info("Software alive");
+                    logger.info("Time remaining : " + (sleepTime - i) +" ms");
+                }
+                displaySoftwareAlive = true;
+            }
+
             return sleepTime;
+
         }
         return 0;
     }

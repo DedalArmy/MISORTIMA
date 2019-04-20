@@ -146,7 +146,7 @@ public class GithubHttpClientTest {
         JSONObject jsonObjectActualRepoWitCommits = githubHttpClient.getLastCommitForRepositoriesList(jsonObjectLastCommit,mockFileWriterJSON,pathTmpDir,"MyFile.json");
 
         JSONArray jsonArrayItems = jsonObjectActualRepoWitCommits.getJSONArray("items");
-        System.out.println(jsonArrayItems);
+        //System.out.println(jsonArrayItems);
 
         for (int i = 0; i < jsonArrayItems.length(); i++) {
             assertTrue(jsonArrayItems.getJSONObject(i).has("last_commit"));
@@ -171,7 +171,7 @@ public class GithubHttpClientTest {
         JSONObject jsonObjectActualRepoWitCommits = githubHttpClient.getLastCommitForRepositoriesList(jsonObjectLastCommit,mockFileWriterJSON,pathTmpDir,"MyFile.json");
 
         JSONArray jsonArrayItems = jsonObjectActualRepoWitCommits.getJSONArray("items");
-        System.out.println(jsonArrayItems);
+        //System.out.println(jsonArrayItems);
 
         for (int i = 0; i < jsonArrayItems.length(); i++) {
             if(jsonArrayItems.get(i) instanceof JSONObject){

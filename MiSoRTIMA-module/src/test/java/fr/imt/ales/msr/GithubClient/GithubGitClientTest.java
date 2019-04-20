@@ -29,7 +29,7 @@ public class GithubGitClientTest {
     @BeforeEach
     public void setUp() throws URISyntaxException, IOException {
         pathTmpDir = System.getProperty("java.io.tmpdir") + "/test-clone";
-        System.out.println(pathTmpDir);
+        //System.out.println(pathTmpDir);
     }
 
     @Test

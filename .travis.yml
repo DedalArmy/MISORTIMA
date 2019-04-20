@@ -9,8 +9,6 @@ env:
 
 sudo: false
 
-#Extend timeout travis build
-install: travis_wait 35 mvn install
 
 # cache the build tool's caches
 cache:
